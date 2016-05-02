@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="yudaApp">
+  <head>
+    <meta charset="utf-8">
+    <title>yuda</title>
+    <base href = "/" />
+    <link rel="stylesheet" href="vendors/angular-material.min.css" />
+    <script src="vendors/angular.min.js"></script>
+    <script src="vendors/angular-aria.min.js"></script>
+    <script src="vendors/angular-animate.min.js"></script>
+    <script src="vendors/angular-material.min.js"></script>
+    <script src="vendors/angular-route.min.js"></script>
+    <script src="assets/scripts/client.js"></script>
+  </head>
+  <body>
+    <md-toolbar layout="row" layout-align="space-between center">
+      <span><h1 class="md-toolbar-tools">yuda.</h1></span>
+      <span>
+        <md-button>Goals</md-button>
+        <md-button>Friends</md-button>
+        <md-button>Create</md-button>
+        <a href="/">Home</a>
+        <a href="/registerScreen">Register</a>
+      </span>
+    </md-toolbar>
+
+    <div ng-view>
+
+    </div>
+  </body>
+</html>
