@@ -1,3 +1,4 @@
 <label>Goal Name:</label><input type="text" ng-model="newGoal.name" /><br />
-<label>Description:</label><input type="text" ng-model="newGoal.description" />
-<button ng-click="register.addGoal()">Add Goal</button>
+<label>Description:</label><input type="text" ng-model="newGoal.description" /><br />
+<md-datepicker ng-model="newGoal.date" md-placeholder="Enter date" md-min-date="newGoal.minDate"></md-datepicker>
+<button ng-click="newGoal.addGoal()">Add Goal</button>

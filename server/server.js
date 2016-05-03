@@ -1,12 +1,15 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var pg = require('pg');
 var session = require('express-session');
 var localStrategy = require('passport-local').Strategy;
 var encryptLib = require('../modules/encryptLib');
 
 var index = require('./routes/index');
 var register = require('./routes/register');
+var login = require('./routes/login');
+var newGoal = require('./routes/newGoal');
 var connectionString = 'postgres://localhost:5432/yuda';
 
 var app = express();
@@ -30,7 +33,7 @@ passport.use('local', new localStrategy({ passReqToCallback: true, usernameField
     pg.connect(connectionString, function(err, client){
       console.log('Called local --pg');
       var user = null;
-      var query = client.query('SELECT * FROM user WHERE username = $1', [username]);
+      var query = client.query('SELECT * FROM public.user WHERE username = $1', [username]);
 
       query.on('row', function(row){
         console.log('User object', row);
@@ -40,6 +43,7 @@ passport.use('local', new localStrategy({ passReqToCallback: true, usernameField
           console.log('Passwords match in local strategy');
           done(null, user);
         } else {
+          console.log('Incorrect password');
           done(null, false, { message: 'Incorrect username or password' });
         }
       });
@@ -47,6 +51,7 @@ passport.use('local', new localStrategy({ passReqToCallback: true, usernameField
       query.on('end', function(){
         // checks to see if user was found
         if (user === null){
+          console.log('User not found');
           done(null, false, { message: 'Incorrect username or password' });
         }
         client.end();
@@ -69,7 +74,7 @@ passport.deserializeUser(function(id, done){
   pg.connect(connectionString, function(err, client){
     var user = {};
     console.log('Connected to PG in deserializer');
-    var query = client.query('SELECT * FROM user WHERE id = $1', [id]);
+    var query = client.query('SELECT * FROM public.user WHERE id = $1', [id]);
 
     query.on('row', function(row){
       console.log('User row found:', row);
@@ -89,6 +94,8 @@ passport.deserializeUser(function(id, done){
 
 app.use('/', index);
 app.use('/register', register);
+app.use('/addGoal', newGoal);
+app.use('/login', login);
 
 var server = app.listen(3000, function(){
   var port = server.address().port;

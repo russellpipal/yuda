@@ -1,15 +1,14 @@
 var router = require('express').Router();
 var passport = require('passport');
 var pg = require('pg');
-var encryptLib = require('../../modules/encryptLib');
 
 var connectionString = 'postgres://localhost:5432/yuda';
 
 router.post('/', function(req, res){
   pg.connect(connectionString, function(err, client){
-    var today = new Date();
-    var query = client.query('INSERT INTO public.user (username, password, first_visit, last_visit) VALUES ($1, $2, $3, $4) RETURNING username, password',
-    [req.body.username, encryptLib.encryptPassword(req.body.password), today, today]);
+
+    var query = client.query('INSERT INTO goal (goal_name, goal_desc, starting_date, ending_date, user_id) ' +
+      'VALUES ($1, $2, $3, $4, $5)', [req.body.goal_name, req.body.goal_desc, req.body.starting_date, req.body.ending_date, req.user.id]);
 
     query.on('error', function(err){
       console.log(err);
