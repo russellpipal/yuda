@@ -1,4 +1,19 @@
 <label>Goal Name:</label><input type="text" ng-model="newGoal.name" /><br />
 <label>Description:</label><input type="text" ng-model="newGoal.description" /><br />
 <md-datepicker ng-model="newGoal.date" md-placeholder="Enter date" md-min-date="newGoal.minDate"></md-datepicker>
+<md-chips ng-model="newGoal.selectedUsers">
+  <md-autocomplete md-autocomplete-snap md-require-match
+    md-items="user in newGoal.getMatches(newGoal.searchText)"
+    md-item-text="user.username"
+    md-search-text="newGoal.searchText"
+    md-selected-item="newGoal.selectedItem"
+    placeholder="Add a friend">
+    <span md-highlight-text="newGoal.searchText">{{ user.username }}</span>
+  </md-autocomplete>
+  <md-chip-template>
+    <span><strong>{{$chip.username}}</strong></span>
+  </md-chip-template>
+</md-chips>
+
+
 <button ng-click="newGoal.addGoal()">Add Goal</button>

@@ -1,0 +1,16 @@
+<h1>My Goals</h1>
+
+<!-- <div ng-repeat="goal in myGoals.goals">
+  {{ goal }}
+</div> -->
+
+<table ng-table="myGoals.goalParams" class="table" show-filter="true">
+  <tr ng-repeat="goal in myGoals.goals">
+    <td title="'Goal'" sortable="'goal'">
+      {{ goal.goal_name }}
+    </td>
+    <td title="'Date Made'">
+      {{ goal.starting_date }}
+    </td>
+  </tr>
+</table>

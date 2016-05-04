@@ -22,4 +22,26 @@ router.post('/', function(req, res){
   });
 });
 
+router.get('/users', function(req, res){
+  var userList = [];
+  pg.connect(connectionString, function(err, client){
+    var query = client.query('SELECT id, username FROM public.user');
+
+    query.on('error', function(err){
+      console.log(err);
+      res.sendStatus(500);
+    });
+
+    query.on('row', function(rowData){
+      userList.push(rowData);
+    });
+
+    query.on('end', function(){
+      res.send(userList);
+      client.end();
+    });
+
+  });
+});
+
 module.exports = router;

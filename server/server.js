@@ -10,6 +10,7 @@ var index = require('./routes/index');
 var register = require('./routes/register');
 var login = require('./routes/login');
 var newGoal = require('./routes/newGoal');
+var myGoals = require('./routes/myGoals');
 var connectionString = 'postgres://localhost:5432/yuda';
 
 var app = express();
@@ -29,21 +30,21 @@ app.use(passport.session());
 
 passport.use('local', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
   function(req, username, password, done){
-    console.log('Called localStrategy');
+    // console.log('Called localStrategy');
     pg.connect(connectionString, function(err, client){
-      console.log('Called local --pg');
+      // console.log('Called local --pg');
       var user = null;
       var query = client.query('SELECT * FROM public.user WHERE username = $1', [username]);
 
       query.on('row', function(row){
-        console.log('User object', row);
-        console.log('Password', password);
+        // console.log('User object', row);
+        // console.log('Password', password);
         user = row;
         if(encryptLib.comparePassword(password, user.password)){
-          console.log('Passwords match in local strategy');
+          // console.log('Passwords match in local strategy');
           done(null, user);
         } else {
-          console.log('Incorrect password');
+          // console.log('Incorrect password');
           done(null, false, { message: 'Incorrect username or password' });
         }
       });
@@ -51,7 +52,7 @@ passport.use('local', new localStrategy({ passReqToCallback: true, usernameField
       query.on('end', function(){
         // checks to see if user was found
         if (user === null){
-          console.log('User not found');
+          // console.log('User not found');
           done(null, false, { message: 'Incorrect username or password' });
         }
         client.end();
@@ -65,19 +66,19 @@ passport.use('local', new localStrategy({ passReqToCallback: true, usernameField
 ));
 
 passport.serializeUser(function(user, done){
-  console.log('Serializer called');
+  // console.log('Serializer called');
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done){
-  console.log('Deserializer called');
+  // console.log('Deserializer called');
   pg.connect(connectionString, function(err, client){
     var user = {};
-    console.log('Connected to PG in deserializer');
+    // console.log('Connected to PG in deserializer');
     var query = client.query('SELECT * FROM public.user WHERE id = $1', [id]);
 
     query.on('row', function(row){
-      console.log('User row found:', row);
+      // console.log('User row found:', row);
       user = row;
       done(null, user);
     });
@@ -96,6 +97,7 @@ app.use('/', index);
 app.use('/register', register);
 app.use('/addGoal', newGoal);
 app.use('/login', login);
+app.use('/myGoals', myGoals);
 
 var server = app.listen(3000, function(){
   var port = server.address().port;

@@ -1,5 +1,5 @@
 // var app = angular.module('yudaApp', ['ngRoute', 'ngMaterial']);
-var app = angular.module('yudaApp', ['ngMaterial', 'ngRoute']);
+var app = angular.module('yudaApp', ['ngMaterial', 'ngRoute', 'ngTable']);
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
   $routeProvider
@@ -22,6 +22,11 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       templateUrl: 'assets/views/login.html',
       controller: 'LoginController',
       controllerAs: 'login'
+    })
+    .when('/myGoalsView', {
+      templateUrl: 'assets/views/myGoals.html',
+      controller: 'MyGoalsController',
+      controllerAs: 'myGoals'
     })
     .when('/successView', {
       templateUrl: 'assets/views/success.html',
@@ -54,9 +59,11 @@ app.controller('RegisterController', function($http){
 app.controller('NewGoalController', function($http){
   var newGoal = this;
   var today = new Date();
+  newGoal.users = [];
+  newGoal.selectedUsers = [];
   newGoal.minDate = today;
+
   newGoal.addGoal = function(){
-    console.log('addGoal called');
     $http.post('/addGoal', {
       goal_name: newGoal.name,
       goal_desc: newGoal.description,
@@ -64,6 +71,37 @@ app.controller('NewGoalController', function($http){
       ending_date: newGoal.date,
     });
   };
+
+  newGoal.getUsers = function(){
+    $http.get('addGoal/users').then(function(response){
+      newGoal.users = response.data;
+      console.log(newGoal.users);
+    });
+  };
+
+  newGoal.getMatches = function(text){
+    text = text.toLowerCase();
+    console.log('text', text);
+    var ret = newGoal.users.filter(function(d){
+      // console.log('text in function', text);
+      // console.log('d.username', d.username);
+      console.log('startswith?', d.username.startsWith(text));
+      return d.username.startsWith(text);
+    });
+    console.log('ret', ret);
+    return ret;
+  };
+
+  newGoal.transformChip = function(chip) {
+      // If it is an object, it's already a known chip
+      if (angular.isObject(chip)) {
+        return chip;
+      }
+      // Otherwise, create a new one
+      return { name: chip, type: 'new' }
+  }
+
+  newGoal.getUsers();
 });
 
 app.controller('LoginController', function($http, $location){
@@ -73,7 +111,6 @@ app.controller('LoginController', function($http, $location){
       username: login.username,
       password: login.password
     }).then(function(response){
-      console.log(response);
       if (response.data == 'OK') {
         $location.path('/successView');
       } else {
@@ -81,6 +118,20 @@ app.controller('LoginController', function($http, $location){
       }
     });
   };
+});
+
+app.controller('MyGoalsController', function($http){
+  var myGoals = this;
+  myGoals.goals = [];
+  myGoals.getMyGoals = function(){
+    $http.get('/myGoals').then(function(response){
+      for(var i=0; i<response.data.length; i++){
+        myGoals.goals.push(response.data[i]);
+      }
+      myGoals.tableParams = new NgTableParams({}, {dataset: myGoals.goals});
+    });
+  };
+  myGoals.getMyGoals();
 });
 
 app.controller('SuccessController', function($timeout, $location){
