@@ -6,6 +6,7 @@
     <base href = "/" />
     <link rel="stylesheet" href="vendors/angular-material.min.css" />
     <link rel="stylesheet" href="vendors/ng-table.min.css" />
+    <link rel="stylesheet" href="vendors/bootstrap.min.css" />
     <script src="vendors/angular.min.js"></script>
     <script src="vendors/angular-aria.min.js"></script>
     <script src="vendors/angular-animate.min.js"></script>
@@ -18,14 +19,11 @@
     <md-toolbar layout="row" layout-align="space-between center">
       <span><h1 class="md-toolbar-tools">yuda.</h1></span>
       <span>
-        <md-button>Goals</md-button>
-        <md-button>Friends</md-button>
-        <md-button>Create</md-button>
-        <a href="/">Home</a>
-        <a href="/newGoal">New Goal</a>
-        <a href="/myGoalsView">My Goals</a>
-        <a href="/loginView">Login</a>
-        <a href="/registerScreen">Register</a>
+        <md-button href="/myGoalsView">Goals</md-button>
+        <md-button href="/friendsView">Friends</md-button>
+        <md-button href="/newGoal">Create</md-button>
+        <md-button href="/loginView">Login</md-button>
+        <md-button href="/registerScreen">Register</md-button>
       </span>
     </md-toolbar>
 

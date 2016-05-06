@@ -8,7 +8,7 @@ var connectionString = 'postgres://localhost:5432/yuda';
 router.post('/', function(req, res){
   pg.connect(connectionString, function(err, client){
     var today = new Date();
-    var query = client.query('INSERT INTO public.user (username, password, first_visit, last_visit) VALUES ($1, $2, $3, $4) RETURNING username, password',
+    var query = client.query('INSERT INTO users (username, password, first_visit, last_visit) VALUES ($1, $2, $3, $4) RETURNING username, password',
     [req.body.username, encryptLib.encryptPassword(req.body.password), today, today]);
 
     query.on('error', function(err){

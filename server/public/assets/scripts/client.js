@@ -38,6 +38,11 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       controller: 'FailureController',
       controllerAs: 'failure'
     })
+    .when('/friendsView', {
+      templateUrl: 'assets/views/friends.html',
+      controller: 'FriendsController',
+      controllerAs: 'friends'
+    })
     $locationProvider.html5Mode(true);
 }]);
 
@@ -68,39 +73,34 @@ app.controller('NewGoalController', function($http){
       goal_name: newGoal.name,
       goal_desc: newGoal.description,
       starting_date: today,
-      ending_date: newGoal.date,
+      ending_date: newGoal.date
+    }).then(function(response){
+      if (newGoal.selectedUsers.length > 0) {
+        $http.post('/addGoal/friends', {
+          friends: newGoal.selectedUsers,
+          goal_id: response.data.id
+        });
+        newGoal.selectedUsers = [];
+      }
+    }, function(response){
+      console.log('err', response);
     });
   };
+
 
   newGoal.getUsers = function(){
     $http.get('addGoal/users').then(function(response){
       newGoal.users = response.data;
-      console.log(newGoal.users);
     });
   };
 
   newGoal.getMatches = function(text){
     text = text.toLowerCase();
-    console.log('text', text);
     var ret = newGoal.users.filter(function(d){
-      // console.log('text in function', text);
-      // console.log('d.username', d.username);
-      console.log('startswith?', d.username.startsWith(text));
       return d.username.startsWith(text);
     });
-    console.log('ret', ret);
     return ret;
   };
-
-  newGoal.transformChip = function(chip) {
-      // If it is an object, it's already a known chip
-      if (angular.isObject(chip)) {
-        return chip;
-      }
-      // Otherwise, create a new one
-      return { name: chip, type: 'new' }
-  }
-
   newGoal.getUsers();
 });
 
@@ -132,6 +132,23 @@ app.controller('MyGoalsController', function($http){
     });
   };
   myGoals.getMyGoals();
+});
+
+app.controller('FriendsController', function($http){
+  var friends = this;
+  friends.goals = [];
+  friends.getFriendsGoals = function(){
+    $http.get('/friends').then(function(response){
+      // console.log('response.data', response.data);
+      // friends.goals = response.data;
+      // console.log(friends.goals);
+      for(var i=0; i<response.data.length; i++){
+        friends.goals.push(response.data[i]);
+      }
+      console.log(friends.goals);
+    });
+  };
+  friends.getFriendsGoals();
 });
 
 app.controller('SuccessController', function($timeout, $location){

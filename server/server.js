@@ -11,6 +11,7 @@ var register = require('./routes/register');
 var login = require('./routes/login');
 var newGoal = require('./routes/newGoal');
 var myGoals = require('./routes/myGoals');
+var friends = require('./routes/friends')
 var connectionString = 'postgres://localhost:5432/yuda';
 
 var app = express();
@@ -34,7 +35,7 @@ passport.use('local', new localStrategy({ passReqToCallback: true, usernameField
     pg.connect(connectionString, function(err, client){
       // console.log('Called local --pg');
       var user = null;
-      var query = client.query('SELECT * FROM public.user WHERE username = $1', [username]);
+      var query = client.query('SELECT * FROM users WHERE username = $1', [username]);
 
       query.on('row', function(row){
         // console.log('User object', row);
@@ -75,7 +76,7 @@ passport.deserializeUser(function(id, done){
   pg.connect(connectionString, function(err, client){
     var user = {};
     // console.log('Connected to PG in deserializer');
-    var query = client.query('SELECT * FROM public.user WHERE id = $1', [id]);
+    var query = client.query('SELECT * FROM users WHERE id = $1', [id]);
 
     query.on('row', function(row){
       // console.log('User row found:', row);
@@ -98,6 +99,7 @@ app.use('/register', register);
 app.use('/addGoal', newGoal);
 app.use('/login', login);
 app.use('/myGoals', myGoals);
+app.use('/friends', friends);
 
 var server = app.listen(3000, function(){
   var port = server.address().port;
