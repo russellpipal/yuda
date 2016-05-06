@@ -19,7 +19,6 @@ router.get('/', function(req, res){
     });
 
     query.on('end', function(){
-      console.log(results);
       res.send(results);
       client.end();
     });

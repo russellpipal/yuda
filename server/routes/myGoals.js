@@ -26,4 +26,22 @@ router.get('/', function(req, res){
   });
 });
 
+router.put('/completeGoal', function(req, res){
+  pg.connect(connectionString, function(err, client, done){
+    var today = new Date();
+    var query = client.query('UPDATE goal SET completed_date = $1 WHERE id = $2', [today, req.body.id]);
+
+    query.on('error', function(err){
+      console.log(err);
+      done();
+      res.sendStatus(500);
+    });
+
+    query.on('end', function(){
+      res.sendStatus(200);
+      done();
+    });
+  });
+});
+
 module.exports = router;

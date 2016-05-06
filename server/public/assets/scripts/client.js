@@ -1,5 +1,5 @@
 // var app = angular.module('yudaApp', ['ngRoute', 'ngMaterial']);
-var app = angular.module('yudaApp', ['ngMaterial', 'ngRoute', 'ngTable']);
+var app = angular.module('yudaApp', ['ngMaterial', 'ngRoute', 'smart-table']);
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
   $routeProvider
@@ -122,16 +122,20 @@ app.controller('LoginController', function($http, $location){
 
 app.controller('MyGoalsController', function($http){
   var myGoals = this;
-  myGoals.goals = [];
+
+  myGoals.displayedGoals = [];
   myGoals.getMyGoals = function(){
     $http.get('/myGoals').then(function(response){
-      for(var i=0; i<response.data.length; i++){
-        myGoals.goals.push(response.data[i]);
-      }
-      myGoals.tableParams = new NgTableParams({}, {dataset: myGoals.goals});
+      myGoals.goals = response.data;
+      console.log(myGoals.goals);
     });
   };
   myGoals.getMyGoals();
+
+  myGoals.markComplete = function(goal){
+    console.log(goal);
+    $http.put('/myGoals/completeGoal', goal).then(myGoals.getMyGoals);
+  };
 });
 
 app.controller('FriendsController', function($http){

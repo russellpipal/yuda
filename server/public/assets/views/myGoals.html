@@ -1,16 +1,36 @@
 <h1>My Goals</h1>
 
-<!-- <div ng-repeat="goal in myGoals.goals">
-  {{ goal }}
-</div> -->
-
-<table ng-table="myGoals.goalParams" class="table" show-filter="true">
-  <tr ng-repeat="goal in myGoals.goals">
-    <td title="'Goal'" sortable="'goal'">
-      {{ goal.goal_name }}
-    </td>
-    <td title="'Date Made'">
-      {{ goal.starting_date }}
-    </td>
-  </tr>
+<table st-table="myGoals.displayedGoals" st-safe-src="myGoals.goals" class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th st-sort="goal_name">
+        Goal Name
+      </th>
+      <th st-sort="starting_date">
+        Starting Date
+      </th>
+      <th st-sort="ending_date">
+        Ending Date
+      </th>
+      <th>
+        Complete Goal
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="goal in myGoals.displayedGoals">
+      <td>
+        {{ goal.goal_name }}
+      </td>
+      <td>
+        {{ goal.starting_date | date }}
+      </td>
+      <td>
+        {{ goal.ending_date | date }}
+      </td>
+      <td>
+        <md-button class="md-raised" ng-click="myGoals.markComplete(goal)">I did it!</md-button>
+      </td>
+    </tr>
+  </tbody>
 </table>
