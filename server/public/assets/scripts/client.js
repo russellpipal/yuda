@@ -73,7 +73,7 @@ app.controller('NewGoalController', function($http, $mdDialog){
       goal_name: newGoal.name,
       goal_desc: newGoal.description,
       starting_date: today,
-      ending_date: newGoal.date
+      ending_date: new Date(newGoal.date)
     }).then(function(response){
       if (newGoal.selectedUsers.length > 0) {
         $http.post('/addGoal/friends', {
@@ -95,11 +95,8 @@ app.controller('NewGoalController', function($http, $mdDialog){
       .ok('Yes! I\'m going to do it!')
       .cancel('On second thought, no.');
     $mdDialog.show(confirm).then(function(){
-      console.log('Confirm add goal');
       newGoal.addGoal();
-    }, function(){
-      console.log('Cancel add goal');
-    });
+    }, function(){});
   };
 
   newGoal.getUsers = function(){
@@ -137,16 +134,36 @@ app.controller('LoginController', function($http, $location){
 app.controller('MyGoalsController', function($http, $mdDialog){
   var myGoals = this;
 
+
   myGoals.displayedGoals = [];
+  myGoals.displayedClosedGoals = [];
   myGoals.getMyGoals = function(){
+    myGoals.openGoals = [];
+    myGoals.closedGoals = [];
+    var goals = [];
+    var today = new Date();
     $http.get('/myGoals').then(function(response){
-      myGoals.goals = response.data;
+      goals = response.data;
+      for (var i=0; i<goals.length; i++){
+        if (goals[i].completed_date){
+          goals[i].completed = true;
+          myGoals.closedGoals.push(goals[i]);
+        } else {
+          goals[i].ending_date = new Date(goals[i].ending_date);
+          if (goals[i].ending_date > today) {
+            myGoals.openGoals.push(goals[i]);
+          } else {
+            goals[i].completed = false;
+            myGoals.closedGoals.push(goals[i]);
+          }
+        }
+      }
     });
+
   };
   myGoals.getMyGoals();
 
   myGoals.markComplete = function(goal){
-    console.log(goal);
     $http.put('/myGoals/completeGoal', goal).then(myGoals.getMyGoals);
   };
 
@@ -158,10 +175,10 @@ app.controller('MyGoalsController', function($http, $mdDialog){
       .ok('I really did it!')
       .cancel('I guess not.');
     $mdDialog.show(confirm).then(function(){
-      console.log('You confirmed', goal);
+      // console.log('You confirmed', goal);
       myGoals.markComplete(goal);
     }, function(){
-      console.log('You denied', goal);
+      // console.log('You denied', goal);
     });
   };
 

@@ -1,6 +1,6 @@
-<h1>Current Goals</h1>
+<h2>Current Goals</h2>
 
-<table st-table="myGoals.displayedGoals" st-safe-src="myGoals.goals" class="table table-striped table-bordered">
+<table st-table="myGoals.displayedGoals" st-safe-src="myGoals.openGoals" class="table table-striped table-bordered">
   <thead>
     <tr>
       <th st-sort="goal_name">
@@ -29,13 +29,61 @@
         <md-button class="md-raised" ng-click="myGoals.showDetails($event, goal)">See Details</md-button>
       </td>
       <td>
-        {{ goal.starting_date }}
+        {{ goal.starting_date | date }}
       </td>
       <td>
-        {{ goal.ending_date }}
+        {{ goal.ending_date | date }}
       </td>
       <td>
         <md-button class="md-raised" ng-click="myGoals.confirmComplete($event, goal)">I did it!</md-button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Past Goals</h2>
+
+<table st-table="myGoals.displayedClosedGoals" st-safe-src="myGoals.closedGoals" class="table table-stried table-bordered">
+  <thead>
+    <tr>
+      <th st-sort="goal_name">
+        Goal Name
+      </th>
+      <th>
+        Description
+      </th>
+      <th st-sort="starting_date">
+        Starting Date
+      </th>
+      <th st-sort="ending_date">
+        Ending Date
+      </th>
+      <th st-sort="completed">
+        Completed?
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="goal in myGoals.displayedClosedGoals">
+      <td>
+        {{ goal.goal_name }}
+      </td>
+      <td>
+        <md-button class="md-raised" ng-click="myGoals.showDetails($event, goal)">See Details</md-button>
+      </td>
+      <td>
+        {{ goal.starting_date | date }}
+      </td>
+      <td>
+        {{ goal.ending_date | date }}
+      </td>
+      <td>
+        <div ng-show="goal.completed">
+          <span class="glyphicon glyphicon-thumbs-up"></span>
+        </div>
+        <div ng-hide="goal.completed">
+          <span class="glyphicon glyphicon-thumbs-down"></span>
+        </div>
       </td>
     </tr>
   </tbody>
