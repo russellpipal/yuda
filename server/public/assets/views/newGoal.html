@@ -1,6 +1,18 @@
-<label>Goal Name:</label><input type="text" ng-model="newGoal.name" /><br />
-<label>Description:</label><input type="text" ng-model="newGoal.description" /><br />
-<md-datepicker ng-model="newGoal.date" md-placeholder="Enter date" md-min-date="newGoal.minDate"></md-datepicker>
+<!-- <label>Goal Name:</label><input type="text" ng-model="newGoal.name" /><br />
+<label>Description:</label><input type="text" ng-model="newGoal.description" /><br /> -->
+<md-content layout-padding>
+  <md-input-container>
+    <label>Goal Name:</label>
+    <input ng-model="newGoal.name" />
+  </md-input-container>
+  <md-input-container class="md-block">
+    <label>Details:</label>
+    <textarea ng-model="newGoal.description" md-maxlength="150" rows="3" md-select-on-focus></textarea>
+  </md-input-container>
+</md-content>
+
+<md-datepicker ng-model="newGoal.date" md-placeholder="Enter deadline" md-min-date="newGoal.minDate"></md-datepicker>
+
 <md-chips ng-model="newGoal.selectedUsers">
   <md-autocomplete md-autocomplete-snap md-require-match
     md-items="user in newGoal.getMatches(newGoal.searchText)"
@@ -15,5 +27,4 @@
   </md-chip-template>
 </md-chips>
 
-
-<button ng-click="newGoal.addGoal()">Add Goal</button>
+<button ng-click="newGoal.showAddGoal($event)">Add Goal</button>

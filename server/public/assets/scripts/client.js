@@ -61,7 +61,7 @@ app.controller('RegisterController', function($http){
   };
 });
 
-app.controller('NewGoalController', function($http){
+app.controller('NewGoalController', function($http, $mdDialog){
   var newGoal = this;
   var today = new Date();
   newGoal.users = [];
@@ -87,6 +87,20 @@ app.controller('NewGoalController', function($http){
     });
   };
 
+  newGoal.showAddGoal = function(ev){
+    var confirm = $mdDialog.confirm()
+      .title('Really add this goal?')
+      .textContent('Once added, it cannot be deleted. That\'s the whole point of yuda.')
+      .targetEvent(ev)
+      .ok('Yes! I\'m going to do it!')
+      .cancel('On second thought, no.');
+    $mdDialog.show(confirm).then(function(){
+      console.log('Confirm add goal');
+      newGoal.addGoal();
+    }, function(){
+      console.log('Cancel add goal');
+    });
+  };
 
   newGoal.getUsers = function(){
     $http.get('addGoal/users').then(function(response){
@@ -120,14 +134,13 @@ app.controller('LoginController', function($http, $location){
   };
 });
 
-app.controller('MyGoalsController', function($http){
+app.controller('MyGoalsController', function($http, $mdDialog){
   var myGoals = this;
 
   myGoals.displayedGoals = [];
   myGoals.getMyGoals = function(){
     $http.get('/myGoals').then(function(response){
       myGoals.goals = response.data;
-      console.log(myGoals.goals);
     });
   };
   myGoals.getMyGoals();
@@ -136,20 +149,40 @@ app.controller('MyGoalsController', function($http){
     console.log(goal);
     $http.put('/myGoals/completeGoal', goal).then(myGoals.getMyGoals);
   };
+
+  myGoals.confirmComplete = function(ev, goal){
+    var confirm = $mdDialog.confirm()
+      .title('Did you really finish the goal?')
+      .textContent('Confirm to mark the goal completed. No cheating!')
+      .targetEvent(ev)
+      .ok('I really did it!')
+      .cancel('I guess not.');
+    $mdDialog.show(confirm).then(function(){
+      console.log('You confirmed', goal);
+      myGoals.markComplete(goal);
+    }, function(){
+      console.log('You denied', goal);
+    });
+  };
+
+  myGoals.showDetails = function(ev, goal){
+    $mdDialog.show(
+      $mdDialog.alert()
+      .clickOutsideToClose(true)
+      .title('Goal Details')
+      .textContent(goal.goal_desc)
+      .ok('OK')
+      .targetEvent(ev)
+    );
+  };
 });
 
 app.controller('FriendsController', function($http){
   var friends = this;
-  friends.goals = [];
+  friends.displayedGoals = [];
   friends.getFriendsGoals = function(){
     $http.get('/friends').then(function(response){
-      // console.log('response.data', response.data);
-      // friends.goals = response.data;
-      // console.log(friends.goals);
-      for(var i=0; i<response.data.length; i++){
-        friends.goals.push(response.data[i]);
-      }
-      console.log(friends.goals);
+      friends.goals = response.data;
     });
   };
   friends.getFriendsGoals();
