@@ -13,22 +13,26 @@
     <script src="vendors/angular-material.min.js"></script>
     <script src="vendors/angular-route.min.js"></script>
     <script src="vendors/smart-table.min.js"></script>
+    <script src="vendors/moment.min.js"></script>
     <script src="assets/scripts/client.js"></script>
   </head>
   <body>
-    <md-toolbar layout="row" layout-align="space-between center">
-      <span><h1 class="md-toolbar-tools">yuda.</h1></span>
-      <span>
+    <md-toolbar layout="row" ng-controller="ToolbarController as toolbar">
+      <div class="md-toolbar-tools">
+      <span>yuda.</span>
+      <span flex></span>
         <md-button href="/myGoalsView">Goals</md-button>
         <md-button href="/friendsView">Friends</md-button>
         <md-button href="/newGoal">Create</md-button>
         <md-button href="/loginView">Login</md-button>
         <md-button href="/registerScreen">Register</md-button>
-      </span>
+        <md-button ng-click="toolbar.logout()" href="/logout">Logout</md-button>
+      </div>
     </md-toolbar>
 
     <div ng-view class="container">
 
     </div>
+
   </body>
 </html>

@@ -17,7 +17,6 @@ router.post('/', function(req, res){
     });
 
     query.on('end', function(){
-      console.log(returnRow);
       res.send(returnRow);
       client.end();
     });

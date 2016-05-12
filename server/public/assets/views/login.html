@@ -1,3 +1,16 @@
-<label>Username:</label><input type="text" ng-model="login.username" /><br />
-<label>Password:</label><input type="password" ng-model="login.password" /><br />
-<button ng-click="login.loginUser()">Login</button>
+
+<div class="md-inline-form" layout="column" id="loginForm">
+  <md-content layout-padding>
+    <div>
+      <md-input-container>
+        <label>Username:</label><input type="text" ng-model="login.username" /><br />
+      </md-input-container>
+    </div>
+    <div>
+      <md-input-container>
+        <label>Password:</label><input type="password" ng-model="login.password" /><br />
+      </md-input-container>
+    </div>
+    <md-button ng-click="login.loginUser()" class="md-raised md-primary">Login</button>
+  </md-content>
+</div>

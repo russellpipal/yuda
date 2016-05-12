@@ -11,7 +11,8 @@ var register = require('./routes/register');
 var login = require('./routes/login');
 var newGoal = require('./routes/newGoal');
 var myGoals = require('./routes/myGoals');
-var friends = require('./routes/friends')
+var friends = require('./routes/friends');
+var logout = require('./routes/logout');
 var connectionString = 'postgres://localhost:5432/yuda';
 
 var app = express();
@@ -100,6 +101,7 @@ app.use('/addGoal', newGoal);
 app.use('/login', login);
 app.use('/myGoals', myGoals);
 app.use('/friends', friends);
+app.use('/logout', logout);
 
 var server = app.listen(3000, function(){
   var port = server.address().port;

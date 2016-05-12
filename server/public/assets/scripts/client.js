@@ -1,5 +1,10 @@
 // var app = angular.module('yudaApp', ['ngRoute', 'ngMaterial']);
-var app = angular.module('yudaApp', ['ngMaterial', 'ngRoute', 'smart-table']);
+var app = angular.module('yudaApp', ['ngMaterial', 'ngRoute', 'smart-table'])
+.config(function($mdThemingProvider){
+  $mdThemingProvider.theme('default')
+    .primaryPalette('green')
+    .accentPalette('brown');
+});
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
   $routeProvider
@@ -50,6 +55,15 @@ app.controller('YudaController', function(){
 
 });
 
+app.controller('ToolbarController', function($http, $location){
+  var toolbar = this;
+  toolbar.logout = function(){
+    $http.post('/logout').then(function(){
+      $location.path('/');
+    })
+  };
+});
+
 app.controller('RegisterController', function($http){
   var register = this;
   register.addUser = function(){
@@ -67,6 +81,8 @@ app.controller('NewGoalController', function($http, $mdDialog){
   newGoal.users = [];
   newGoal.selectedUsers = [];
   newGoal.minDate = today;
+  // var todayMoment = moment(today).format("MMM-DD-YYYY");
+  // console.log('todaymoment', todayMoment);
 
   newGoal.addGoal = function(){
     $http.post('/addGoal', {
@@ -108,7 +124,7 @@ app.controller('NewGoalController', function($http, $mdDialog){
   newGoal.getMatches = function(text){
     text = text.toLowerCase();
     var ret = newGoal.users.filter(function(d){
-      return d.username.startsWith(text);
+      return d.username.toLowerCase().startsWith(text);
     });
     return ret;
   };
@@ -133,8 +149,6 @@ app.controller('LoginController', function($http, $location){
 
 app.controller('MyGoalsController', function($http, $mdDialog){
   var myGoals = this;
-
-
   myGoals.displayedGoals = [];
   myGoals.displayedClosedGoals = [];
   myGoals.getMyGoals = function(){
@@ -145,15 +159,20 @@ app.controller('MyGoalsController', function($http, $mdDialog){
     $http.get('/myGoals').then(function(response){
       goals = response.data;
       for (var i=0; i<goals.length; i++){
+        goals[i].prettyStart = moment(goals[i].starting_date).format('MMM-DD-YYYY');
         if (goals[i].completed_date){
           goals[i].completed = true;
+          goals[i].prettyEnd = moment(goals[i].ending_date).format('MMM-DD-YYYY');
+          goals[i].prettyComplete = moment(goals[i].completed_date).format('MMM-DD-YYYY');
           myGoals.closedGoals.push(goals[i]);
         } else {
           goals[i].ending_date = new Date(goals[i].ending_date);
           if (goals[i].ending_date > today) {
+            goals[i].prettyEnd = moment(goals[i].ending_date).fromNow();
             myGoals.openGoals.push(goals[i]);
           } else {
             goals[i].completed = false;
+            goals[i].prettyEnd = moment(goals[i].ending_date).format('MMM-DD-YYYY')
             myGoals.closedGoals.push(goals[i]);
           }
         }
@@ -175,11 +194,8 @@ app.controller('MyGoalsController', function($http, $mdDialog){
       .ok('I really did it!')
       .cancel('I guess not.');
     $mdDialog.show(confirm).then(function(){
-      // console.log('You confirmed', goal);
       myGoals.markComplete(goal);
-    }, function(){
-      // console.log('You denied', goal);
-    });
+    }, function(){});
   };
 
   myGoals.showDetails = function(ev, goal){
@@ -194,20 +210,61 @@ app.controller('MyGoalsController', function($http, $mdDialog){
   };
 });
 
-app.controller('FriendsController', function($http){
+app.controller('FriendsController', function($http, $mdDialog){
   var friends = this;
-  friends.displayedGoals = [];
+  friends.displayedUnviewedGoals = [];
+  friends.displayedViewedGoals = [];
+
   friends.getFriendsGoals = function(){
     $http.get('/friends').then(function(response){
-      friends.goals = response.data;
+      var today = new Date();
+      var goals = response.data;
+      friends.viewedGoals = [];
+      friends.unviewedGoals = [];
+      for(var i=0; i<goals.length; i++){
+        goals[i].prettyStart = moment(goals[i].starting_date).format('MMM DD YYYY');
+        if(goals[i].completed_date){
+          goals[i].completed = true;
+          goals[i].prettyComplete = moment(goals[i].completed_date).format('MMM DD YYYY');
+          goals[i].prettyEnd = moment(goals[i].ending_date).format('MMM DD YYYY');
+        } else {
+          if (new Date(goals[i].ending_date) < today) {
+            goals[i].failed = true;
+            goals[i].prettyEnd = moment(goals[i].ending_date).format('MMM DD YYYY');
+          } else {
+            goals[i].open = true;
+            goals[i].prettyEnd = moment(goals[i].ending_date).fromNow();
+          }
+        }
+        if(goals[i].viewed){
+          friends.viewedGoals.push(goals[i]);
+        } else {
+          friends.unviewedGoals.push(goals[i]);
+        }
+      }
     });
   };
+
+  friends.markViewed = function(goal){
+    $http.put('/friends/markViewed', goal).then(friends.getFriendsGoals);
+  };
+
+  friends.showDetails = function(ev, goal){
+    $mdDialog.show(
+      $mdDialog.alert()
+      .clickOutsideToClose(true)
+      .title('Goal Details')
+      .textContent(goal.goal_desc)
+      .ok('OK')
+      .targetEvent(ev)
+    );
+  };
+
   friends.getFriendsGoals();
 });
 
 app.controller('SuccessController', function($timeout, $location){
-  $timeout(2000);
-  $location.path('/newGoal');
+  $timeout($location.path('/myGoalsView'), 10000);
 });
 
 app.controller('FailureController', function(){

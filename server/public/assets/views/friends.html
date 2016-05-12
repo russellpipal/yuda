@@ -1,36 +1,48 @@
 <h1>Friends' Goals</h1>
 
-<table st-table="friends.displayedGoals" st-safe-src="friends.goals" class="table table-striped table-bordered">
+<table st-table="friends.displayedUnviewedGoals" st-safe-src="friends.unviewedGoals" class="table table-condensed table-bordered table-hover">
   <thead>
-    <tr>
-      <th st-sort="username">
-        Who
-      </th>
-      <th st-sort="goal_name">
-        Goal Name
-      </th>
-      <th st-sort="starting_date">
-        Starting Date
-      </th>
-      <th st-sort="ending_date">
-        Ending Date
-      </th>
-    </tr>
+    <th>Who</th>
+    <th>Goal</th>
+    <th>Description</th>
+    <th>Starting Date</th>
+    <th>Deadline</th>
+    <th>Completed?</th>
+    <th>Mark Viewed</th>
   </thead>
   <tbody>
-    <tr ng-repeat="goal in friends.displayedGoals">
-      <td>
-        {{ goal.username }}
-      </td>
-      <td>
-        {{ goal.goal_name }}
-      </td>
-      <td>
-        {{ goal.starting_date | date }}
-      </td>
-      <td>
-        {{ goal.ending_date | date }}
-      </td>
+    <tr ng-repeat="goal in friends.displayedUnviewedGoals" ng-class="{success: goal.completed, danger: goal.failed, info: goal.open}">
+      <td>{{ goal.username }}</td>
+      <td>{{ goal.goal_name}}</td>
+      <td><md-button class="md-raised" ng-click="friends.showDetails($event, goal)">Description</md-button></td>
+      <td>{{ goal.prettyStart }}</td>
+      <td>{{ goal.prettyEnd }}</td>
+      <td>{{ goal.prettyComplete }}</td>
+      <td><md-button class="md-raised" ng-click="friends.markViewed(goal)">Mark Viewed</md-button></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h1>Viewed Goals</h1>
+
+<table st-table="friends.displayedViewedGoals" st-safe-src="friends.viewedGoals" class="table table-condensed table-bordered table-hover">
+  <thead>
+    <th>Who</th>
+    <th>Goal</th>
+    <th>Description</th>
+    <th>Starting Date</th>
+    <th>Deadline</th>
+    <th>Completed?</th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="goal in friends.displayedViewedGoals" ng-class="{success: goal.completed, danger: goal.failed, info: goal.open}">
+      <td>{{ goal.username }}</td>
+      <td>{{ goal.goal_name}}</td>
+      <td><md-button class="md-raised" ng-click="friends.showDetails($event, goal)">Description</md-button></td>
+      <td>{{ goal.prettyStart }}</td>
+      <td>{{ goal.prettyEnd }}</td>
+      <td>{{ goal.prettyComplete }}</td>
     </tr>
   </tbody>
 </table>
