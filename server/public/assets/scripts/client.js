@@ -1,9 +1,8 @@
-// var app = angular.module('yudaApp', ['ngRoute', 'ngMaterial']);
 var app = angular.module('yudaApp', ['ngMaterial', 'ngRoute', 'smart-table'])
 .config(function($mdThemingProvider){
   $mdThemingProvider.theme('default')
     .primaryPalette('green')
-    .accentPalette('brown');
+    .accentPalette('yellow');
 });
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
@@ -48,11 +47,21 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       controller: 'FriendsController',
       controllerAs: 'friends'
     })
+    .when('/yudaBombView', {
+      templateUrl: 'assets/views/yudaBomb.html',
+      controller: 'YudaBombController',
+      controllerAs: 'yudaBomb'
+    })
     $locationProvider.html5Mode(true);
 }]);
 
-app.controller('YudaController', function(){
+app.controller('YudaController', function(){});
 
+app.controller('YudaBombController', function($location){
+  var yudaBomb = this;
+  yudaBomb.continue = function(){
+    $location.path('/myGoalsView');
+  };
 });
 
 app.controller('ToolbarController', function($http, $location){
@@ -106,7 +115,7 @@ app.controller('NewGoalController', function($http, $mdDialog){
   newGoal.showAddGoal = function(ev){
     var confirm = $mdDialog.confirm()
       .title('Really add this goal?')
-      .textContent('Once added, it cannot be deleted. That\'s the whole point of yuda.')
+      .textContent('Once added, it cannot be deleted. That\'s the whole point of Yuda.')
       .targetEvent(ev)
       .ok('Yes! I\'m going to do it!')
       .cancel('On second thought, no.');
@@ -147,7 +156,7 @@ app.controller('LoginController', function($http, $location){
   };
 });
 
-app.controller('MyGoalsController', function($http, $mdDialog){
+app.controller('MyGoalsController', function($http, $mdDialog, $location){
   var myGoals = this;
   myGoals.displayedGoals = [];
   myGoals.displayedClosedGoals = [];
@@ -195,6 +204,7 @@ app.controller('MyGoalsController', function($http, $mdDialog){
       .cancel('I guess not.');
     $mdDialog.show(confirm).then(function(){
       myGoals.markComplete(goal);
+      $location.path('/yudaBombView');
     }, function(){});
   };
 
