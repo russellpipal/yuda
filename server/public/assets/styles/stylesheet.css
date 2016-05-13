@@ -28,3 +28,16 @@ td {
   margin-left: auto;
   margin-right: auto;
 }
+
+#registerContainer {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#registerContainer h1 {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 0;
+  font-size: 48px;
+}

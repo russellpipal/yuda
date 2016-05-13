@@ -1,19 +1,42 @@
-<label>Username:</label><input type="text" ng-model="register.username" /><br />
-<label>Password:</label><input type="text" ng-model="register.password" />
-<button ng-click="register.addUser()">Add User</button>
-
-<!-- <form action="/register" method="post">
-  <div>
-    <label for="username">Username:</label>
-    <input type="text" name="username" id="username" ng-model="register.username"/>
-  </div>
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" name="password" id="password" ng-model="register.password"/>
-  </div>
-  <div>
-    <input type="submit" value="Register"/>
-  </div>
-
-  {{ register.sampleText }}
-</form> -->
+<div id="registerContainer">
+  <h1>Yuda allows you to create and track goals</h1>
+  <md-grid-list md-cols="3" md-row-height="1:1">
+    <md-grid-tile>
+      <div>
+        <h2>Make a goal</h2>
+        <p>
+          Choose something challenging yet obtainable
+        </p>
+        <h2>Pick a deadline</h2>
+        <p>
+          Give yourself enough time to finish
+        </p>
+      </div>
+    </md-grid-tile>
+    <md-grid-tile>
+      <div layout="column" class="md-inline-form">
+        <md-input-container>
+          <label>Username:</label>
+          <input type="text" ng-model="register.username" />
+        </md-input-container>
+        <md-input-container>
+          <label>Password:</label>
+          <input type="password" ng-model="register.password" />
+        </md-input-container>
+        <md-button class="md-raised md-primary" ng-click="register.addUser()">Add User</md-button>
+      </div>
+    </md-grid-tile>
+    <md-grid-tile>
+      <div>
+        <h2>Invite friends</h2>
+        <p>
+          Stay accountable by letting others see your goals
+        </p>
+        <h2>Do it!</h2>
+        <p>
+          Once a goal has been submitted it cannot be deleted or altered
+        </p>
+    </div>
+    </md-grid-tile>
+  </md-grid-list>
+</div>
