@@ -11,13 +11,11 @@ router.post('/', passport.authenticate('local', {
 }));
 
 router.get('/success', function(req, res){
-  // res.send('OK');
   res.send('OK');
 });
 
 router.get('/failure', function(req, res){
-  // res.send('FAIL');
-  res.send('BAD');
+  res.send('FAIL');
 });
 
 module.exports = router;

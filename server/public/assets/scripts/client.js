@@ -51,7 +51,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
       templateUrl: 'assets/views/yudaBomb.html',
       controller: 'YudaBombController',
       controllerAs: 'yudaBomb'
-    })
+    });
     $locationProvider.html5Mode(true);
 }]);
 
@@ -69,7 +69,7 @@ app.controller('ToolbarController', function($http, $location){
   toolbar.logout = function(){
     $http.post('/logout').then(function(){
       $location.path('/');
-    })
+    });
   };
 });
 
@@ -90,8 +90,6 @@ app.controller('NewGoalController', function($http, $mdDialog){
   newGoal.users = [];
   newGoal.selectedUsers = [];
   newGoal.minDate = today;
-  // var todayMoment = moment(today).format("MMM-DD-YYYY");
-  // console.log('todaymoment', todayMoment);
 
   newGoal.addGoal = function(){
     $http.post('/addGoal', {

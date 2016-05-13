@@ -32,29 +32,21 @@ app.use(passport.session());
 
 passport.use('local', new localStrategy({ passReqToCallback: true, usernameField: 'username' },
   function(req, username, password, done){
-    // console.log('Called localStrategy');
     pg.connect(connectionString, function(err, client){
-      // console.log('Called local --pg');
       var user = null;
       var query = client.query('SELECT * FROM users WHERE username = $1', [username]);
 
       query.on('row', function(row){
-        // console.log('User object', row);
-        // console.log('Password', password);
         user = row;
         if(encryptLib.comparePassword(password, user.password)){
-          // console.log('Passwords match in local strategy');
           done(null, user);
         } else {
-          // console.log('Incorrect password');
           done(null, false, { message: 'Incorrect username or password' });
         }
       });
 
       query.on('end', function(){
-        // checks to see if user was found
         if (user === null){
-          // console.log('User not found');
           done(null, false, { message: 'Incorrect username or password' });
         }
         client.end();
@@ -68,19 +60,15 @@ passport.use('local', new localStrategy({ passReqToCallback: true, usernameField
 ));
 
 passport.serializeUser(function(user, done){
-  // console.log('Serializer called');
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done){
-  // console.log('Deserializer called');
   pg.connect(connectionString, function(err, client){
     var user = {};
-    // console.log('Connected to PG in deserializer');
     var query = client.query('SELECT * FROM users WHERE id = $1', [id]);
 
     query.on('row', function(row){
-      // console.log('User row found:', row);
       user = row;
       done(null, user);
     });

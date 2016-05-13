@@ -55,7 +55,7 @@ router.post('/friends', function(req, res){
 router.get('/users', function(req, res){
   var userList = [];
   pg.connect(connectionString, function(err, client){
-    var query = client.query('SELECT id, username FROM users');
+    var query = client.query('SELECT id, username FROM users WHERE id != $1', [req.user.id]);
 
     query.on('error', function(err){
       console.log(err);
