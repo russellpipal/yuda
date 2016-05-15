@@ -115,6 +115,8 @@ app.controller('NewGoalController', function($http, $mdDialog){
         });
         newGoal.selectedUsers = [];
       }
+      newGoal.name = '';
+      newGoal.description = '';
     }, function(response){
       console.log('err', response);
     });
@@ -285,6 +287,4 @@ app.controller('SuccessController', function($timeout, $location){
   $timeout($location.path('/myGoalsView'), 10000);
 });
 
-app.controller('FailureController', function(){
-
-});
+app.controller('FailureController', function(){});
