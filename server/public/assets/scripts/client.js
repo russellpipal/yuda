@@ -73,13 +73,23 @@ app.controller('ToolbarController', function($http, $location){
   };
 });
 
-app.controller('RegisterController', function($http){
+app.controller('RegisterController', function($http, $location){
   var register = this;
   register.addUser = function(){
-    console.log('addUser called');
     $http.post('/register', {
       username: register.username,
       password: register.password
+    }).then(function(){
+      $http.post('/login', {
+        username: register.username,
+        password: register.password
+      }).then(function(response){
+        if (response.data == 'OK') {
+          $location.path('/successView');
+        } else {
+          $location.path('/failureView');
+        }
+      });
     });
   };
 });
