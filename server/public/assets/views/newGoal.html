@@ -22,7 +22,9 @@
         md-item-text="user.username"
         md-search-text="newGoal.searchText"
         md-selected-item="newGoal.selectedItem"
-        placeholder="Add friends">
+        placeholder="Add friends"
+        md-autofocus="true"
+        md-autoselect="true">
         <span md-highlight-text="newGoal.searchText">{{ user.username }}</span>
       </md-autocomplete>
       <md-chip-template>

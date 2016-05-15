@@ -1,90 +1,103 @@
-<h2>Current Goals</h2>
+<div ng-show="myGoals.openGoals.length > 0 || myGoals.closedGoals.length > 0">
 
-<table st-table="myGoals.displayedGoals" st-safe-src="myGoals.openGoals" class="table table-hover table-bordered table-condensed">
-  <thead>
-    <tr>
-      <th st-sort="goal_name">
-        Goal Name
-      </th>
-      <th>
-        Description
-      </th>
-      <th st-sort="starting_date">
-        Starting Date
-      </th>
-      <th st-sort="ending_date">
-        Deadline
-      </th>
-      <th>
-        Complete Goal
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="goal in myGoals.displayedGoals" class="info">
-      <td>
-        {{ goal.goal_name }}
-      </td>
-      <td>
-        <md-button class="md-raised" ng-click="myGoals.showDetails($event, goal)">See Description</md-button>
-      </td>
-      <td>
-        {{ goal.prettyStart }}
-      </td>
-      <td>
-        {{ goal.prettyEnd }}
-      </td>
-      <td>
-        <md-button class="md-raised" ng-click="myGoals.confirmComplete($event, goal)">I did it!</md-button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <h2>Current Goals</h2>
 
-<h2>Past Goals</h2>
+  <table st-table="myGoals.displayedGoals" st-safe-src="myGoals.openGoals" class="table table-hover table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th st-sort="goal_name">
+          Goal Name
+        </th>
+        <th>.length
+          Description
+        </th>
+        <th st-sort="starting_date">
+          Starting Date
+        </th>
+        <th st-sort="ending_date">
+          Deadline
+        </th>
+        <th>
+          Complete Goal
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="goal in myGoals.displayedGoals" class="info">
+        <td>
+          {{ goal.goal_name }}
+        </td>
+        <td>
+          <md-button class="md-raised" ng-click="myGoals.showDetails($event, goal)">See Description</md-button>
+        </td>
+        <td>
+          {{ goal.prettyStart }}
+        </td>
+        <td>
+          {{ goal.prettyEnd }}
+        </td>
+        <td>
+          <md-button class="md-raised" ng-click="myGoals.confirmComplete($event, goal)">I did it!</md-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-<table st-table="myGoals.displayedClosedGoals" st-safe-src="myGoals.closedGoals" class="table table-hover table-bordered table-condensed">
-  <thead>
-    <tr>
-      <th st-sort="goal_name">
-        Goal Name
-      </th>
-      <th>
-        Description
-      </th>
-      <th st-sort="starting_date">
-        Starting Date
-      </th>
-      <th st-sort="ending_date">
-        Ending Date
-      </th>
-      <th st-sort="completed">
-        Completed?
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="goal in myGoals.displayedClosedGoals" ng-class="{success: goal.completed, danger: !goal.completed}">
-      <td>
-        {{ goal.goal_name }}
-      </td>
-      <td>
-        <md-button class="md-raised" ng-click="myGoals.showDetails($event, goal)">See Description</md-button>
-      </td>
-      <td>
-        {{ goal.prettyStart }}
-      </td>
-      <td>
-        {{ goal.prettyEnd }}
-      </td>
-      <td>
-        <div ng-show="goal.completed">
-          <span class="glyphicon glyphicon-thumbs-up"></span>
-        </div>
-        <div ng-hide="goal.completed">
-          <span class="glyphicon glyphicon-thumbs-down"></span>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <h2>Past Goals</h2>
+
+  <table st-table="myGoals.displayedClosedGoals" st-safe-src="myGoals.closedGoals" class="table table-hover table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th st-sort="goal_name">
+          Goal Name
+        </th>
+        <th>
+          Description
+        </th>
+        <th st-sort="starting_date">
+          Starting Date
+        </th>
+        <th st-sort="ending_date">
+          Deadline
+        </th>
+        <th st-sort="completed">
+          Completed?
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="goal in myGoals.displayedClosedGoals" ng-class="{success: goal.completed, danger: !goal.completed}">
+        <td>
+          {{ goal.goal_name }}
+        </td>
+        <td>
+          <md-button class="md-raised" ng-click="myGoals.showDetails($event, goal)">See Description</md-button>
+        </td>
+        <td>
+          {{ goal.prettyStart }}
+        </td>
+        <td>
+          {{ goal.prettyEnd }}
+        </td>
+        <td>
+          <div ng-show="goal.completed">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+          </div>
+          <div ng-hide="goal.completed">
+            <span class="glyphicon glyphicon-thumbs-down"></span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<div class="container" ng-show="myGoals.openGoals.length === 0 && myGoals.closedGoals.length === 0" id="welcome">
+  <h1 class="center big">Welcome to Yuda!</h1>
+  <div class="narrower">
+    <h1 class="center">Add a goal by clicking the "Create" button.</h1>
+    <h3 class="center">Choose something that you know you can do, but just need some extra motivation.</h3>
+    <h5 class="center">"Win the Boston Marathon" may not be realistic. Try something like "Jog five times by next weekend" instead.</h5>
+  </div>
+</div>
