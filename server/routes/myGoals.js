@@ -7,7 +7,7 @@ var connectionString = 'postgres://localhost:5432/yuda';
 router.get('/', function(req, res){
   var results = [];
   pg.connect(connectionString, function(err, client, done){
-    var query = client.query('SELECT * FROM goal WHERE user_id = $1', [req.user.id]);
+    var query = client.query('SELECT * FROM goal WHERE user_id = $1 ORDER BY ending_date', [req.user.id]);
 
     query.on('error', function(err){
       console.log(err);

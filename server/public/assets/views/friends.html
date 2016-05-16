@@ -2,12 +2,12 @@
 
 <table st-table="friends.displayedUnviewedGoals" st-safe-src="friends.unviewedGoals" class="table table-condensed table-bordered table-hover">
   <thead>
-    <th>Who</th>
-    <th>Goal</th>
+    <th st-sort="username">Who</th>
+    <th st-sort="goal_name">Goal</th>
     <th>Description</th>
-    <th>Starting Date</th>
-    <th>Deadline</th>
-    <th>Completed?</th>
+    <th st-sort="starting_date">Starting Date</th>
+    <th st-sort="ending_date">Deadline</th>
+    <th st-sort="completed">Completed?</th>
     <th>Mark Viewed</th>
   </thead>
   <tbody>
@@ -28,12 +28,12 @@
 
 <table st-table="friends.displayedViewedGoals" st-safe-src="friends.viewedGoals" class="table table-condensed table-bordered table-hover">
   <thead>
-    <th>Who</th>
-    <th>Goal</th>
+    <th st-sort="username">Who</th>
+    <th st-sort="goal_name">Goal</th>
     <th>Description</th>
-    <th>Starting Date</th>
-    <th>Deadline</th>
-    <th>Completed?</th>
+    <th st-sort="starting_date">Starting Date</th>
+    <th st-sort="ending_date">Deadline</th>
+    <th st-sort="completed">Completed?</th>
   </thead>
   <tbody>
     <tr ng-repeat="goal in friends.displayedViewedGoals" ng-class="{success: goal.completed, danger: goal.failed, info: goal.open}">
