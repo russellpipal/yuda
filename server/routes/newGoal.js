@@ -6,19 +6,20 @@ var connectionString = 'postgres://localhost:5432/yuda';
 
 router.post('/', function(req, res){
   var returnRow = {}
-  pg.connect(connectionString, function(err, client){
+  pg.connect(connectionString, function(err, client, done){
 
     var query = client.query('INSERT INTO goal (goal_name, goal_desc, starting_date, ending_date, user_id) ' +
       'VALUES ($1, $2, $3, $4, $5) RETURNING *', [req.body.goal_name, req.body.goal_desc, req.body.starting_date, req.body.ending_date, req.user.id]);
 
     query.on('error', function(err){
       console.log(err);
+      done();
       res.sendStatus(500);
     });
 
     query.on('end', function(){
+      done();
       res.send(returnRow);
-      client.end();
     });
 
     query.on('row', function(rowData){
@@ -37,28 +38,30 @@ router.post('/friends', function(req, res){
   }
   queryString = queryString.substring(0, queryString.length - 2);
 
-  pg.connect(connectionString, function(err, client){
+  pg.connect(connectionString, function(err, client, done){
     var query = client.query(queryString);
 
     query.on('error', function(err){
       console.log(err);
+      done();
       res.sendStatus(500);
     });
 
     query.on('end', function(){
+      done();
       res.sendStatus(200);
-      client.end();
     });
   });
 });
 
 router.get('/users', function(req, res){
   var userList = [];
-  pg.connect(connectionString, function(err, client){
+  pg.connect(connectionString, function(err, client, done){
     var query = client.query('SELECT id, username FROM users WHERE id != $1', [req.user.id]);
 
     query.on('error', function(err){
       console.log(err);
+      done();
       res.sendStatus(500);
     });
 
@@ -67,8 +70,8 @@ router.get('/users', function(req, res){
     });
 
     query.on('end', function(){
+      done();
       res.send(userList);
-      client.end();
     });
   });
 });
