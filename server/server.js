@@ -14,7 +14,7 @@ var newGoal = require('./routes/newGoal');
 var myGoals = require('./routes/myGoals');
 var friends = require('./routes/friends');
 var logout = require('./routes/logout');
-var connectionString = 'postgres://localhost:5432/yuda';
+var connectionString = require('../modules/initializeDB').connectionString;
 
 var app = express();
 

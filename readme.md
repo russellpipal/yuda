@@ -1,5 +1,7 @@
 ### Yuda
 
+## Yuda is currently a work in progress. I hope to have it deployed soon.
+
 Yuda is a web application that allows users to make and track goals.
 
 Users designate a goal with a deadline, and may allow other users to view goals.
