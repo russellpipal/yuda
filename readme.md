@@ -8,4 +8,4 @@ Once a goal has been submitted, it cannot be altered or deleted. This is the pri
 
 The project uses Node.js, AngularJS, Express, PostgreSQL, and Angular Material.
 
-Run "npm start" to start server
+Run "npm start" to start server. Requires PostgreSQL to be running.
