@@ -6,7 +6,7 @@ var encryptLib = require('../../modules/encryptLib');
 var connectionString = require('../../modules/initializeDB').connectionString;
 
 router.post('/', function(req, res){
-  pg.connect(connectionString, function(err, client){
+  pg.connect(connectionString, function(err, client, done){
     var today = new Date();
     var query = client.query('INSERT INTO users (username, password, first_visit, last_visit) VALUES ($1, $2, $3, $4) RETURNING username, password',
     [req.body.username, encryptLib.encryptPassword(req.body.password), today, today]);
@@ -17,8 +17,8 @@ router.post('/', function(req, res){
     });
 
     query.on('end', function(){
+      done();
       res.sendStatus(200);
-      client.end();
     });
   });
 });
