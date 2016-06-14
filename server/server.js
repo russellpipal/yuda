@@ -5,6 +5,7 @@ var pg = require('pg');
 var session = require('express-session');
 var localStrategy = require('passport-local').Strategy;
 var encryptLib = require('../modules/encryptLib');
+var initializeDB = require('../modules/initializeDB').initializeDB;
 
 var index = require('./routes/index');
 var register = require('./routes/register');
@@ -19,6 +20,8 @@ var app = express();
 
 app.use(bodyParser.json());
 app.use(express.static('server/public'));
+
+initializeDB();
 
 app.use(session({
   secret: 'secret',

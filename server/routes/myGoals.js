@@ -2,7 +2,7 @@ var router = require('express').Router();
 var passport = require('passport');
 var pg = require('pg');
 
-var connectionString = 'postgres://localhost:5432/yuda';
+var connectionString = require('../../modules/initializeDB').connectionString;
 
 router.get('/', function(req, res){
   var results = [];

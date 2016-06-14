@@ -23,9 +23,31 @@ function initializeDB(){
       } else {
 
         var userTable, goalTable, friendTable;
-        // add queries here
-        var query = client.query(userTable + goalTable + friendTable);
 
+        var userTable = 'CREATE TABLE IF NOT EXISTS users (' +
+          'id SERIAL PRIMARY KEY,' +
+          'username varchar(20) NOT NULL,' +
+          'first_visit date,' +
+          'last_visit date,' +
+          'password varchar(255));';
+
+        var goalTable = 'CREATE TABLE IF NOT EXISTS goal (' +
+          'id SERIAL PRIMARY KEY,' +
+          'goal_name varchar(50) NOT NULL,' +
+          'goal_desc varchar(255),' +
+          'starting_date date,' +
+          'ending_date date,' +
+          'past_deadline boolean,' +
+          'user_id INT REFERENCES users(id),' +
+          'completed_date date);';
+
+        var friendTable = 'CREATE TABLE IF NOT EXISTS user_goal (' +
+          'id SERIAL PRIMARY KEY,' +
+          'goal_id INT REFERENCES goal(id),' +
+          'user_id INT REFERENCES users(id),' +
+          'viewed boolean);';
+
+        var query = client.query(userTable + goalTable + friendTable);
 
         query.on('end', function(){
           console.log('tables created');

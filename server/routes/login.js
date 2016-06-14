@@ -3,7 +3,7 @@ var passport = require('passport');
 var pg = require('pg');
 var encryptLib = require('../../modules/encryptLib');
 
-var connectionString = 'postgres://localhost:5432/yuda';
+var connectionString = require('../../modules/initializeDB').connectionString;
 
 router.post('/', passport.authenticate('local', {
   successRedirect: '/login/success',
