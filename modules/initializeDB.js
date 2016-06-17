@@ -6,7 +6,7 @@ if (process.env.DATABASE_URL){
   pg.defaults.ssl = true;
   connectionString = process.env.DATABASE_URL;
 } else {
-  connectionString = "postgres://localhost:5432/yuda";
+  connectionString = 'postgres://localhost:5432/yuda';
 }
 
 function initializeDB(){
