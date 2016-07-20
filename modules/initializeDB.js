@@ -23,7 +23,7 @@ function initializeDB(){
 
         var userTable = 'CREATE TABLE IF NOT EXISTS users (' +
           'id SERIAL PRIMARY KEY,' +
-          'username varchar(20) NOT NULL,' +
+          'username varchar(20) UNIQUE NOT NULL,' +
           'first_visit date,' +
           'last_visit date,' +
           'password varchar(255));';
