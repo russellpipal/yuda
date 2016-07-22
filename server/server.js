@@ -1,3 +1,5 @@
+//[[[[[[[[[[[[[[[[[[[[NPM]]]]]]]]]]]]]]]]]]]]
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
@@ -6,6 +8,8 @@ var session = require('express-session');
 var localStrategy = require('passport-local').Strategy;
 var encryptLib = require('../modules/encryptLib');
 var initializeDB = require('../modules/initializeDB').initializeDB;
+
+//[[[[[[[[[[[[[[[[[[[[[[[[[[[Angular Routes]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 var index = require('./routes/index');
 var register = require('./routes/register');
@@ -16,12 +20,16 @@ var friends = require('./routes/friends');
 var logout = require('./routes/logout');
 var connectionString = require('../modules/initializeDB').connectionString;
 
+//[[[[[[[[[[[[[[[[[[[[[[[[[[[[App Setup]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
 var app = express();
 
 app.use(bodyParser.json());
 app.use(express.static('server/public'));
 
 initializeDB();
+
+//[[[[[[[[[[[[[[[[[[[[[[[[[[[[Passport]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 app.use(session({
   secret: 'secret',
@@ -86,6 +94,8 @@ passport.deserializeUser(function(id, done){
   });
 });
 
+//[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[Routes]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
 app.use('/', index);
 app.use('/register', register);
 app.use('/addGoal', newGoal);
@@ -93,6 +103,8 @@ app.use('/login', login);
 app.use('/myGoals', myGoals);
 app.use('/friends', friends);
 app.use('/logout', logout);
+
+//[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[Server]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 var server = app.listen(3000, function(){
   var port = server.address().port;
