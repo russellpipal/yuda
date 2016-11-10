@@ -47,7 +47,6 @@ function initializeDB(){
         var query = client.query(userTable + goalTable + friendTable);
 
         query.on('end', function(){
-          console.log('tables created');
           resolve();
           done();
         });
